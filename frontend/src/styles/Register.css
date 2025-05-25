@@ -1,0 +1,110 @@
+
+
+
+.register{
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: rgb(65, 65, 65);
+}
+
+.register nav{
+    height: 8vh;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-size: 35px;
+    text-align: center;
+    border-bottom: 1px solid rgb(72, 72, 72);
+}
+
+.register-main{
+    /* width: 100%; */
+    height: 80vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.register-intro{
+    /* background-color: aqua; */
+    max-width: 40%;
+    min-width: 40%;
+    color: rgb(255, 255, 255);
+    font-size: 2em;
+}
+
+.signup{
+    background-color: rgb(255, 255, 255);
+    max-width: 40%;
+    min-width: 40%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 40vh;
+    max-height: 80vh;
+    border-radius: 7px;
+    padding: 15px;
+    gap: 10px;
+}
+
+.signup form {
+    width: 90%;
+}
+
+.signup form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 4;
+    /* background-color: aliceblue; */
+}
+
+
+.signup form input{
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    /* padding: 3px; */
+}
+
+.signup form button{
+    width: 100%;
+    font-size: 1.5em; 
+    cursor: pointer;
+    padding: 7px;
+    /* height: 40px; */
+    border-radius: 7px;
+    background-color: rgb(37, 62, 255);
+}
+
+.signup form button:hover{
+    background-color: rgb(0, 132, 255);
+    color: white;
+}
+
+.signup-heading{
+    display: flex;
+    width: 90%;
+    gap: 10px;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.signup-errors{
+    width: 90%;
+    min-height: 20px;
+    color: rgb(60, 0, 255);
+    font-weight: 500;
+    /* background-color: antiquewhite; */
+}
+
+.s-h-l a{
+    cursor: pointer;
+    color: rgb(0, 128, 255);
+}

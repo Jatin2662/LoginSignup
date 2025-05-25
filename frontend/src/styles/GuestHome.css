@@ -1,0 +1,98 @@
+.guest-navbar {
+    background-color: var(--nav-color);
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.guest-navbar span, .guest-bottom-navbar span {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.guest-navbar ul {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    width: 40%;
+}
+
+.guest-navbar ul li {
+    padding: 4px;
+}
+
+.guest-navbar ul li a,
+.guest-bottom-navbar li a {
+    font-weight: 600;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.guest-bottom-navbar {
+    /* height: 12vh; */
+    background-color:  var(--nav-color);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.guest-bottom-navbar nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.guest-bottom-navbar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rights{
+    border-top: 1px solid black;
+    text-align: center;
+}
+
+
+.guest-home-content {
+    height: 80vh;
+    background-color: aliceblue;
+}
+
+.hero{
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+.hero h1{
+    margin: 0;
+    padding: 0;
+}
+
+.explore-btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-box{
+    border: 1px solid rgb(151, 151, 151);
+    padding: 7px;
+    border-radius: 3px;
+}
