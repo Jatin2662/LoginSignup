@@ -14,6 +14,10 @@ const userSchema = new Schema({
         type: String,
         enum: ['guest', 'user', 'admin'],
         default: 'user'
+    },
+    isVerified:{
+        type: Boolean,
+        dafault: false
     }
 });
 

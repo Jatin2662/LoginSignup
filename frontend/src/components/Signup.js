@@ -58,7 +58,7 @@ function SignUp() {
             setMessage(message)
             if (success) {
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/auth/verify');
                 }, 1000)
             } else if (error) {
                 const details = error?.details[0].message;
