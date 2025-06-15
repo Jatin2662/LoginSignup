@@ -48,9 +48,16 @@ function SignUp() {
 
         const { firstName, lastName, email, password } = signupData;
 
+        const lowerEmail = signupData.email.toLowerCase();
+
+        const payload = {
+            ...signupData,
+            email: lowerEmail
+        };
+
         try {
             const url = 'http://localhost:8080/auth/signup';
-            const response = await axios.post(url, signupData)
+            const response = await axios.post(url, payload)
 
             const result = response.data;
             const { success, message, error } = result;
@@ -65,7 +72,7 @@ function SignUp() {
                 setMessage(details)
             } else if (!success) {
                 setMessage(message)
-            }else {
+            } else {
                 setMessage(message || "SignUp failed");
             }
 

@@ -60,32 +60,61 @@ const signup = async (req, res) => {
 
         const { firstName, lastName, email, password, role } = req.body;
 
-        const user = await UserModel.findOne({ email });
+        const lowerEmail = email.toLowerCase();
+
+        const user = await UserModel.findOne({ email: lowerEmail });
 
         if (user) {
             return res.status(409).json({ message: "User already exists, Login to continue", success: false })
         }
 
-        const userModel = new UserModel({ firstName, lastName, email, password, role: role || 'user' });
+        const userModel = new UserModel({ firstName, lastName, email: lowerEmail, password, role: role || 'user' });
 
         userModel.password = await bcrypt.hash(password, 10);
 
         await userModel.save();
 
-        const myUser = await UserModel.findOne({ email });
+        const myUser = await UserModel.findOne({ lowerEmail });
 
         const token = jwt.sign(
-            { _id: myUser._id},
+            { _id: myUser._id },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         )
 
         const verificationLink = `http://localhost:3000/auth/verify/${token}`
 
-        sendVerificationLink(email, verificationLink);
+        sendVerificationLink(lowerEmail, verificationLink);
 
         res.status(201).json({ message: "SignUp success, Verify Email to continue.", success: true })
 
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error", success: false })
+    }
+}
+
+const sendLink = async (req, res, next) => {
+
+    const {email} = req.body;
+    const lowerEmail = email.toLowerCase();
+    try {
+
+        const user = await UserModel.findOne({ email: lowerEmail });
+
+        if (!user) {
+            return res.status(400).json({ message: "No user found.", success: false })
+        }
+
+        const token = jwt.sign(
+            { _id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        )
+
+        const verificationLink = `http://localhost:3000/auth/verify/${token}`
+        sendVerificationLink(email, verificationLink);
+
+        res.status(201).json({ message: "Check email and click link to verify.", success: true })
     } catch (err) {
         res.status(500).json({ message: "Internal server error", success: false })
     }
@@ -95,15 +124,15 @@ const verifyEmail = async (req, res, next) => {
 
     const { token } = req.params;
 
-    try{
+    try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const user = await UserModel.findById(decoded._id);
 
-        if(!user){
+        if (!user) {
             return res.status(404).json({ message: "User not found.", success: false })
         }
-        if(user.isVerified){
+        if (user.isVerified) {
             return res.status(200).json({ message: "Email is already verified", success: true })
         }
 
@@ -111,7 +140,7 @@ const verifyEmail = async (req, res, next) => {
         await user.save();
 
         res.status(202).json({ message: "Email verified successfully.", success: true })
-    }catch{
+    } catch {
         res.status(400).json({ message: "Invalid or Expired token.", success: false })
     }
 }
@@ -123,13 +152,15 @@ const login = async (req, res) => {
 
         const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ email });
+        const lowerEmail = email.toLowerCase();
+
+        const user = await UserModel.findOne({ email: lowerEmail });
         const errorMessage = 'Authentication failed, email or password is incorrect.'
         if (!user) {
             return res.status(403).json({ message: errorMessage, success: false })
         }
-        
-        if(!user.isVerified){
+
+        if (!user.isVerified) {
             return res.status(403).json({ message: "Email nott verified.", success: false })
         }
 
@@ -163,5 +194,6 @@ const login = async (req, res) => {
 module.exports = {
     signup,
     login,
-    verifyEmail
+    verifyEmail,
+    sendLink
 }

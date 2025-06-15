@@ -33,25 +33,32 @@ function LogIn() {
 
         const { email, password } = loginData;
 
+        const lowerEmail = loginData.email.toLowerCase();
+
+        const payload = {
+            ...loginData,
+            email: lowerEmail
+        }
+
         try {
             const url = 'http://localhost:8080/auth/login';
-            const response = await axios.post(url, loginData);
+            const response = await axios.post(url, payload);
 
             const result = response.data;
 
             const { success, message, jwtToken, name, role, email, error } = result;
 
-            if(success){
+            if (success) {
                 localStorage.setItem('token', jwtToken);
                 localStorage.setItem('loggedInUser', name)
                 localStorage.setItem('role', role)
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     navigate('/user', { replace: true });
                 }, 1000)
-            }else if(!success){
+            } else if (!success) {
                 setMessage(message);
-            }else if (error) {
+            } else if (error) {
                 const details = error?.details?.[0]?.message || "Something went wrong";
                 setMessage(details);
             } else {
@@ -61,7 +68,7 @@ function LogIn() {
             // setMessage(response.data.message)
         } catch (err) {
             const errorMsg = err.response?.data?.message || "Server error";
-        setMessage(errorMsg);
+            setMessage(errorMsg);
 
         }
 
@@ -80,7 +87,7 @@ function LogIn() {
             </div>
 
             <div className="signup-errors">
-                {message}
+                {message === 'Email nott verified.' ? (<Link to='/auth/verify'>Verify</Link>) : (message)}
             </div>
 
             <form onSubmit={handleSubmit}>
