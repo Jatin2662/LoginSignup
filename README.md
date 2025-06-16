@@ -9,6 +9,7 @@
 - JWT
 - JOI, Role Based Access
 - Email verification
+- Reset password
 
 2. Frontend
 - Role Based UI Rendering
