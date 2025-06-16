@@ -95,7 +95,7 @@ const signup = async (req, res) => {
 
 const sendLink = async (req, res, next) => {
 
-    const {email} = req.body;
+    const { email, linkName } = req.body;
     const lowerEmail = email.toLowerCase();
     try {
 
@@ -111,10 +111,18 @@ const sendLink = async (req, res, next) => {
             { expiresIn: '1h' }
         )
 
-        const verificationLink = `http://localhost:3000/auth/verify/${token}`
+        let verificationLink;
+        if (linkName === 'verify') {
+            verificationLink = `http://localhost:3000/auth/verify/${token}`;
+        } else if (linkName === 'forgot-password') {
+            verificationLink = `http://localhost:3000/auth/forgot-password/${token}`;
+        } else {
+            return res.status(400).json({ message: "Invalid link name.", success: false });
+        }
+
         sendVerificationLink(email, verificationLink);
 
-        res.status(201).json({ message: "Check email and click link to verify.", success: true })
+        res.status(201).json({ message: `Check email and click link to ${linkName}.`, success: true })
     } catch (err) {
         res.status(500).json({ message: "Internal server error", success: false })
     }
@@ -132,6 +140,7 @@ const verifyEmail = async (req, res, next) => {
         if (!user) {
             return res.status(404).json({ message: "User not found.", success: false })
         }
+
         if (user.isVerified) {
             return res.status(200).json({ message: "Email is already verified", success: true })
         }
@@ -139,9 +148,57 @@ const verifyEmail = async (req, res, next) => {
         user.isVerified = true;
         await user.save();
 
-        res.status(202).json({ message: "Email verified successfully.", success: true })
+        return res.status(202).json({ message: "Email verified successfully.", success: true })
+
     } catch {
         res.status(400).json({ message: "Invalid or Expired token.", success: false })
+    }
+}
+
+const verifyEmailForResetPassword = async (req, res, next) => {
+
+    const { token } = req.params;
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await UserModel.findById(decoded._id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found.", success: false })
+        }
+
+        return res.status(200).json({ message: "Proceed to reset password.", success: true, userEmail: user.email })
+
+    } catch {
+        res.status(400).json({ message: "Invalid or Expired token.", success: false })
+    }
+}
+
+const resetPassword = async (req, res, next) => {
+
+    try {
+        const { token } = req.params;
+        const { password, confirmPassword } = req.body;
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Mismatch check", success: false })
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await UserModel.findByIdAndUpdate(
+            decoded._id,
+            { $set: { password: hashedPassword } },
+            { new: true })
+
+        await user.save();
+
+        res.status(200).json({ message: "Password updated.", success: true })
+
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error", success: false })
     }
 }
 
@@ -195,5 +252,7 @@ module.exports = {
     signup,
     login,
     verifyEmail,
-    sendLink
+    sendLink,
+    resetPassword,
+    verifyEmailForResetPassword
 }
