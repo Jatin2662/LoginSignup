@@ -108,3 +108,10 @@
     cursor: pointer;
     color: rgb(0, 128, 255);
 }
+
+.forgot-password{
+    font-size: 1.1em;
+    font-style: 500;
+    width: 90%;
+    text-align: left;
+}

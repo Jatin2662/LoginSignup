@@ -111,6 +111,8 @@ function LogIn() {
                 />
                 <button type="submit" >Log In</button>
             </form>
+
+            <div className="forgot-password" ><Link to="/auth/forgot-password">Forgot Password?</Link></div>
         </>
     );
 }
