@@ -14,6 +14,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Unauthorized } from './pages/Unauthorized';
 import VerificationPage from './components/VerificationPage';
+import ForgotPassword from './components/ForgotPassword';
 
 
 
@@ -43,7 +44,8 @@ function App() {
           <Route index element={<LogIn />} />
           <Route path="login" element={<LogIn />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="verify/:token?" element={<VerificationPage/>} />
+          <Route path="verify/:token?" element={<VerificationPage />} />
+          <Route path="forgot-password/:token?" element={<ForgotPassword />} />
         </Route>
       </Routes>
     </>
